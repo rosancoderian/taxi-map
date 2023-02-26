@@ -4,16 +4,50 @@
 	import * as L from 'leaflet';
 	import { LeafletLayer } from 'deck.gl-leaflet';
 	import { MapView } from '@deck.gl/core';
-	import { GeoJsonLayer, ArcLayer } from '@deck.gl/layers';
+	import { GeoJsonLayer } from '@deck.gl/layers';
 	import { onMount } from 'svelte';
 
-	// source: Natural Earth http://www.naturalearthdata.com/ via geojson.xyz
+	export let data;
+
+	let map = null;
+	let deckLayer = null;
+
+	function createDeckLayer(data) {
+		return new LeafletLayer({
+			views: [
+				new MapView({
+					repeat: false
+				})
+			],
+			layers: [
+				new GeoJsonLayer({
+					id: 'taxi',
+					data,
+					filled: true,
+					pointRadiusMinPixels: 2,
+					pointRadiusScale: 100,
+					getPointRadius: (f) => 11 - f.properties.scalerank,
+					getFillColor: [200, 0, 80, 180]
+				})
+			]
+		});
+	}
+
+	function updateDeckLayer(data) {
+		if (deckLayer) deckLayer.remove();
+		if (map) {
+			if (data?.message === 'no results found') return deckLayer.remove();
+			deckLayer = createDeckLayer(data);
+			map.addLayer(deckLayer);
+		}
+	}
+
+	$: {
+		updateDeckLayer(data);
+	}
 
 	onMount(() => {
-		const AIR_PORTS =
-			'https://api.data.gov.sg/v1/transport/taxi-availability?date_time=2023-02-25T14%3A00%3A00';
-
-		const map = L.map(document.getElementById('map'), {
+		map = L.map(document.getElementById('map'), {
 			center: [1.28967, 103.85007],
 			zoom: 12,
 			minZoom: 12
@@ -24,37 +58,7 @@
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map);
 
-		const deckLayer = new LeafletLayer({
-			views: [
-				new MapView({
-					repeat: false
-				})
-			],
-			layers: [
-				new GeoJsonLayer({
-					id: 'airports',
-					data: AIR_PORTS,
-					// Styles
-					filled: true,
-					pointRadiusMinPixels: 2,
-					pointRadiusScale: 100,
-					getPointRadius: (f) => 11 - f.properties.scalerank,
-					getFillColor: [200, 0, 80, 180]
-				})
-				// new ArcLayer({
-				// 	id: 'arcs',
-				// 	data: AIR_PORTS,
-				// 	dataTransform: (d) => d.features.filter((f) => f.properties.scalerank < 4),
-				// 	// Styles
-				// 	getSourcePosition: (f) => [1.28967, 103.85007], // London
-				// 	getTargetPosition: (f) => f.geometry.coordinates,
-				// 	getSourceColor: [0, 128, 200],
-				// 	getTargetColor: [200, 0, 80],
-				// 	getWidth: 1
-				// })
-			]
-		});
-		map.addLayer(deckLayer);
+		updateDeckLayer(data);
 	});
 </script>
 

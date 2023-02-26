@@ -12,14 +12,15 @@
 	let date = $page.url.searchParams.get('date') ?? '';
 	let time = 0;
 
-	$: timeLabel = getTimeText(time);
+	$: taxiAvailability = data.taxiAvailability[time] ?? undefined;
+	$: timeText = getTimeText(time, false);
 
 	function onDateChange() {
 		if (date) goto(`/?date=${date}`);
 	}
 </script>
 
-<Map />
+<Map data={taxiAvailability} />
 <div class="my-4 absolute left-1/2 -translate-x-1/2 z-[400] shadow-lg border">
 	<DatePicker
 		name="date"
@@ -36,7 +37,7 @@
 	class="my-4 p-2 absolute bottom-4 left-1/2 -translate-x-1/2 z-[400] bg-white shadow-lg border rounded"
 >
 	<Slider
-		labelText={`Select time: (${timeLabel})`}
+		labelText={`Select time: (${timeText})`}
 		min={0}
 		max={24}
 		minLabel="12 AM"
