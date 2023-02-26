@@ -64,14 +64,4 @@
 	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
 	crossorigin=""
 />
-<div id="map" />
-
-<style>
-	#map {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-	}
-</style>
+<div id="map" class="w-full h-full absolute top-0 left-0" />

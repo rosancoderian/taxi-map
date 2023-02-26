@@ -5,17 +5,8 @@
 </script>
 
 <Map />
-<div class="mapControl">
+<div class="my-4 absolute left-1/2 -translate-x-1/2 z-[400] shadow-lg border">
 	<DatePicker bind:value={selectedDate} dateFormat="Y-m-d" datePickerType="single">
-		<DatePickerInput placeholder="yyyy-mm-dd" />
+		<DatePickerInput placeholder="Select Date" />
 	</DatePicker>
 </div>
-
-<style>
-	.mapControl {
-		position: absolute;
-		top: 20px;
-		left: 100px;
-		z-index: 400;
-	}
-</style>
