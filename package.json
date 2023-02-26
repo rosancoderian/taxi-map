@@ -27,6 +27,8 @@
 	"type": "module",
 	"dependencies": {
 		"@deck.gl/core": "^8.8.26",
-		"@deck.gl/layers": "^8.8.26"
+		"@deck.gl/layers": "^8.8.26",
+		"deck.gl-leaflet": "^1.2.1",
+		"leaflet": "^1.9.3"
 	}
 }
