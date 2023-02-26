@@ -14,10 +14,12 @@
 			'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_airports.geojson';
 
 		const map = L.map(document.getElementById('map'), {
-			center: [51.47, 0.45],
-			zoom: 4
+			center: [1.28967, 103.85007],
+			zoom: 12,
+			minZoom: 12
 		});
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution:
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map);
@@ -25,7 +27,7 @@
 		const deckLayer = new LeafletLayer({
 			views: [
 				new MapView({
-					repeat: true
+					repeat: false
 				})
 			],
 			layers: [
@@ -35,31 +37,33 @@
 					// Styles
 					filled: true,
 					pointRadiusMinPixels: 2,
-					pointRadiusScale: 2000,
+					pointRadiusScale: 100,
 					getPointRadius: (f) => 11 - f.properties.scalerank,
 					getFillColor: [200, 0, 80, 180]
-				}),
-				new ArcLayer({
-					id: 'arcs',
-					data: AIR_PORTS,
-					dataTransform: (d) => d.features.filter((f) => f.properties.scalerank < 4),
-					// Styles
-					getSourcePosition: (f) => [-0.4531566, 51.4709959], // London
-					getTargetPosition: (f) => f.geometry.coordinates,
-					getSourceColor: [0, 128, 200],
-					getTargetColor: [200, 0, 80],
-					getWidth: 1
 				})
+				// new ArcLayer({
+				// 	id: 'arcs',
+				// 	data: AIR_PORTS,
+				// 	dataTransform: (d) => d.features.filter((f) => f.properties.scalerank < 4),
+				// 	// Styles
+				// 	getSourcePosition: (f) => [1.28967, 103.85007], // London
+				// 	getTargetPosition: (f) => f.geometry.coordinates,
+				// 	getSourceColor: [0, 128, 200],
+				// 	getTargetColor: [200, 0, 80],
+				// 	getWidth: 1
+				// })
 			]
 		});
 		map.addLayer(deckLayer);
-
-		const featureGroup = L.featureGroup();
-		featureGroup.addLayer(L.marker([51.4709959, -0.4531566]));
-		map.addLayer(featureGroup);
 	});
 </script>
 
+<link
+	rel="stylesheet"
+	href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	crossorigin=""
+/>
 <div id="map" />
 
 <style>
