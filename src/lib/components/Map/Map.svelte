@@ -11,7 +11,7 @@
 
 	onMount(() => {
 		const AIR_PORTS =
-			'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_airports.geojson';
+			'https://api.data.gov.sg/v1/transport/taxi-availability?date_time=2023-02-25T14%3A00%3A00';
 
 		const map = L.map(document.getElementById('map'), {
 			center: [1.28967, 103.85007],
