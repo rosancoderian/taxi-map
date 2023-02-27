@@ -1,7 +1,8 @@
 // @ts-nocheck
 
+export const ssr = false
+
 import { readCache, writeCache } from '$lib/server/utils/cache'
-import fs from 'fs'
 
 /** @type {import('./$types').PageLoad} */
 export async function load(event) {
