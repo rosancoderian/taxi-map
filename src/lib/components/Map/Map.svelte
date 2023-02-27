@@ -13,33 +13,20 @@
 	let map = null
 	let deckLayer = null
 
-	function createDeckLayer(data) {
-		return new LeafletLayer({
-			views: [
-				new MapView({
-					repeat: false
-				})
-			],
-			layers: [
-				new GeoJsonLayer({
-					id: 'taxi',
-					data,
-					filled: true,
-					pointRadiusMinPixels: 2,
-					pointRadiusScale: 100,
-					getPointRadius: (f) => 11 - f.properties.scalerank,
-					getFillColor: [200, 0, 80, 180]
-				})
-			]
-		})
-	}
+	$: dataLayer = new GeoJsonLayer({
+		id: 'taxi',
+		data,
+		filled: true,
+		pointRadiusMinPixels: 2,
+		pointRadiusScale: 100,
+		getPointRadius: (f) => 11 - f.properties.scalerank,
+		getFillColor: [200, 0, 80, 180]
+	})
 
 	function updateDeckLayer(data) {
-		if (deckLayer) deckLayer.remove()
-		if (map) {
-			if (!data || data?.message === 'no results found') return
-			deckLayer = createDeckLayer(data)
-			map.addLayer(deckLayer)
+		if (map && deckLayer) {
+			if (!data || data?.message === 'no results found') deckLayer.setProps({ layers: [] })
+			deckLayer.setProps({ layers: [dataLayer] })
 		}
 	}
 
@@ -55,12 +42,21 @@
 			minZoom: 12
 		})
 
+		deckLayer = new LeafletLayer({
+			views: [
+				new MapView({
+					repeat: false
+				})
+			],
+			layers: [dataLayer]
+		})
+
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution:
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map)
 
-		updateDeckLayer(data)
+		map.addLayer(deckLayer)
 	})
 </script>
 
