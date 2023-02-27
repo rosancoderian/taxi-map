@@ -3,9 +3,10 @@
 
 	import { goto } from '$app/navigation'
 	import Map from '$lib/components/Map/Map.svelte'
-	import { DatePicker, DatePickerInput, Slider } from 'carbon-components-svelte'
+	import { DatePicker, DatePickerInput, Slider, ToastNotification } from 'carbon-components-svelte'
 	import { page } from '$app/stores'
 	import * as dateUtils from '$lib/utils/date'
+	import { isDataExist } from '$lib/utils/api'
 
 	export let data
 
@@ -20,6 +21,7 @@
 			goto(`/?date=${ev.detail.dateStr}`)
 		}
 	}
+	$: console.log(taxiAvailability)
 </script>
 
 <Map data={taxiAvailability} />
@@ -49,3 +51,15 @@
 		bind:value={time}
 	/>
 </div>
+
+{#if isDataExist(taxiAvailability)}
+	<div class="my-4 p-2 absolute right-0 z-[400]">
+		<ToastNotification
+			lowContrast
+			kind="warning-alt"
+			title="Response"
+			subtitle={`No results found.`}
+			caption={`Data for date: ${date}`}
+		/>
+	</div>
+{/if}
