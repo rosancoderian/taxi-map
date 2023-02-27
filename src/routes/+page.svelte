@@ -3,10 +3,9 @@
 
 	import { goto } from '$app/navigation';
 	import Map from '$lib/components/Map/Map.svelte';
-	import { getTimeText } from '$lib/utils/getTimeText';
 	import { DatePicker, DatePickerInput, Slider } from 'carbon-components-svelte';
 	import { page } from '$app/stores';
-	import { getYesterday, isBeforeToday } from '$lib/utils/date';
+	import * as dateUtils from '$lib/utils/date';
 
 	export let data;
 
@@ -14,21 +13,21 @@
 	let time = 0;
 
 	$: taxiAvailability = data.taxiAvailability[time] ?? undefined;
-	$: timeText = getTimeText(time, false);
+	$: timeText = dateUtils.getTimeText(time, false);
 
 	function onDateChange(ev) {
-		if (ev.detail.dateStr && isBeforeToday(ev.detail.dateStr)) goto(`/?date=${ev.detail.dateStr}`);
+		if (ev.detail.dateStr && dateUtils.isBeforeToday(ev.detail.dateStr))
+			goto(`/?date=${ev.detail.dateStr}`);
 	}
 </script>
 
 <Map data={taxiAvailability} />
 <div class="my-4 absolute left-1/2 -translate-x-1/2 z-[400] shadow-lg border">
-	{getYesterday()}
 	<DatePicker
 		name="date"
 		dateFormat="Y-m-d"
 		datePickerType="single"
-		maxDate={getYesterday()}
+		maxDate={dateUtils.getYesterday()}
 		bind:value={date}
 		on:change={onDateChange}
 	>

@@ -1,4 +1,4 @@
-import { getTimeText } from '$lib/utils/getTimeText';
+import * as dateUtils from '$lib/utils/date';
 import { error, json } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
@@ -9,7 +9,7 @@ export async function GET(event) {
 		const promises = [];
 
 		for (let i = 0; i <= 24; i++) {
-			const timeText = getTimeText(i, false);
+			const timeText = dateUtils.getTimeText(i, false);
 			const url = `https://api.data.gov.sg/v1/transport/taxi-availability?date_time=${date}T${timeText}`;
 			promises.push(event.fetch(url));
 		}
