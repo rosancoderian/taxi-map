@@ -13,7 +13,7 @@
 	let date = $page.url.searchParams.get('date')
 	let time = 0
 
-	$: taxiAvailability = data.taxiAvailability[time] ?? undefined
+	$: taxiAvailabilityData = data.taxiAvailability[time] ?? undefined
 	$: timeText = dateUtils.getTimeText(time, false)
 
 	function onDateChange(ev) {
@@ -21,10 +21,10 @@
 			goto(`/?date=${ev.detail.dateStr}`)
 		}
 	}
-	$: console.log(taxiAvailability)
 </script>
 
-<Map data={taxiAvailability} />
+<Map data={taxiAvailabilityData} />
+
 <div class="my-4 absolute left-1/2 -translate-x-1/2 z-[400] shadow-lg border">
 	<DatePicker
 		name="date"
@@ -34,7 +34,7 @@
 		bind:value={date}
 		on:change={onDateChange}
 	>
-		<DatePickerInput placeholder="Select Date" onchange={() => console.log(123)} />
+		<DatePickerInput placeholder="Select Date" />
 	</DatePicker>
 </div>
 
@@ -52,14 +52,13 @@
 	/>
 </div>
 
-{#if isDataExist(taxiAvailability)}
+{#if isDataExist(taxiAvailabilityData)}
 	<div class="my-4 p-2 absolute right-0 z-[400]">
 		<ToastNotification
 			lowContrast
 			kind="warning-alt"
-			title="Response"
-			subtitle={`No results found.`}
-			caption={`Data for date: ${date}`}
+			title="No results found."
+			subtitle={`No data: ${date} at ${timeText}`}
 		/>
 	</div>
 {/if}
