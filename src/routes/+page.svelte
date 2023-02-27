@@ -55,7 +55,7 @@
 	/>
 </div>
 
-{#if isDataEmpty(taxiAvailabilityData)}
+{#if date && isDataEmpty(taxiAvailabilityData)}
 	<ToastNotification
 		class="absolute top-16 lg:top-0 right-1/2 translate-x-[10rem] lg:right-0 lg:translate-x-0 z-[400] w-[22rem]"
 		lowContrast
