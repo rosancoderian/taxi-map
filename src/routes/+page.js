@@ -1,17 +1,17 @@
 // @ts-nocheck
 /** @type {import('./$types').PageLoad} */
 export async function load(event) {
-	const date = event.url.searchParams.get('date');
+	const date = event.url.searchParams.get('date')
 
-	let taxiAvailability = [];
+	let taxiAvailability = []
 
 	if (date) {
 		async function getTaxiAvailability() {
-			return await (await event.fetch(`/api/taxi/availability?date=${date}`)).json();
+			return await (await event.fetch(`/api/taxi/availability?date=${date}`)).json()
 		}
 
-		taxiAvailability = getTaxiAvailability();
+		taxiAvailability = getTaxiAvailability()
 	}
 
-	return { taxiAvailability };
+	return { taxiAvailability }
 }

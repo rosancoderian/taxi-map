@@ -1,23 +1,24 @@
 <script>
 	// @ts-nocheck
 
-	import { goto } from '$app/navigation';
-	import Map from '$lib/components/Map/Map.svelte';
-	import { DatePicker, DatePickerInput, Slider } from 'carbon-components-svelte';
-	import { page } from '$app/stores';
-	import * as dateUtils from '$lib/utils/date';
+	import { goto } from '$app/navigation'
+	import Map from '$lib/components/Map/Map.svelte'
+	import { DatePicker, DatePickerInput, Slider } from 'carbon-components-svelte'
+	import { page } from '$app/stores'
+	import * as dateUtils from '$lib/utils/date'
 
-	export let data;
+	export let data
 
-	let date = $page.url.searchParams.get('date');
-	let time = 0;
+	let date = $page.url.searchParams.get('date')
+	let time = 0
 
-	$: taxiAvailability = data.taxiAvailability[time] ?? undefined;
-	$: timeText = dateUtils.getTimeText(time, false);
+	$: taxiAvailability = data.taxiAvailability[time] ?? undefined
+	$: timeText = dateUtils.getTimeText(time, false)
 
 	function onDateChange(ev) {
-		if (ev.detail.dateStr && dateUtils.isBeforeToday(ev.detail.dateStr))
-			goto(`/?date=${ev.detail.dateStr}`);
+		if (ev.detail.dateStr && dateUtils.isBeforeToday(ev.detail.dateStr)) {
+			goto(`/?date=${ev.detail.dateStr}`)
+		}
 	}
 </script>
 

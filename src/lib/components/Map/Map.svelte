@@ -1,17 +1,17 @@
 <script>
 	// @ts-nocheck
 
-	import * as L from 'leaflet';
-	import { LeafletLayer } from 'deck.gl-leaflet';
-	import { MapView } from '@deck.gl/core';
-	import { GeoJsonLayer } from '@deck.gl/layers';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import * as L from 'leaflet'
+	import { LeafletLayer } from 'deck.gl-leaflet'
+	import { MapView } from '@deck.gl/core'
+	import { GeoJsonLayer } from '@deck.gl/layers'
+	import { onMount } from 'svelte'
+	import { browser } from '$app/environment'
 
-	export let data;
+	export let data
 
-	let map = null;
-	let deckLayer = null;
+	let map = null
+	let deckLayer = null
 
 	function createDeckLayer(data) {
 		return new LeafletLayer({
@@ -31,21 +31,21 @@
 					getFillColor: [200, 0, 80, 180]
 				})
 			]
-		});
+		})
 	}
 
 	function updateDeckLayer(data) {
-		if (deckLayer) deckLayer.remove();
+		if (deckLayer) deckLayer.remove()
 		if (map) {
-			if (!data || data?.message === 'no results found') return;
-			deckLayer = createDeckLayer(data);
-			map.addLayer(deckLayer);
+			if (!data || data?.message === 'no results found') return
+			deckLayer = createDeckLayer(data)
+			map.addLayer(deckLayer)
 		}
 	}
 
 	$: {
-		if (browser) requestAnimationFrame(() => updateDeckLayer(data));
-		else updateDeckLayer(data);
+		if (browser) requestAnimationFrame(() => updateDeckLayer(data))
+		else updateDeckLayer(data)
 	}
 
 	onMount(() => {
@@ -53,15 +53,15 @@
 			center: [1.28967, 103.85007],
 			zoom: 12,
 			minZoom: 12
-		});
+		})
 
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution:
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
+		}).addTo(map)
 
-		updateDeckLayer(data);
-	});
+		updateDeckLayer(data)
+	})
 </script>
 
 <link
