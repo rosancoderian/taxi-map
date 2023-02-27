@@ -6,6 +6,7 @@
 	import { MapView } from '@deck.gl/core';
 	import { GeoJsonLayer } from '@deck.gl/layers';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	export let data;
 
@@ -36,14 +37,15 @@
 	function updateDeckLayer(data) {
 		if (deckLayer) deckLayer.remove();
 		if (map) {
-			if (data?.message === 'no results found') return deckLayer.remove();
+			if (!data || data?.message === 'no results found') return;
 			deckLayer = createDeckLayer(data);
 			map.addLayer(deckLayer);
 		}
 	}
 
 	$: {
-		updateDeckLayer(data);
+		if (browser) requestAnimationFrame(() => updateDeckLayer(data));
+		else updateDeckLayer(data);
 	}
 
 	onMount(() => {
