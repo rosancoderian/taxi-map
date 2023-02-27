@@ -6,7 +6,10 @@
 	import { DatePicker, DatePickerInput, Slider, ToastNotification } from 'carbon-components-svelte'
 	import { page } from '$app/stores'
 	import * as dateUtils from '$lib/utils/date'
-	import { isDataExist } from '$lib/utils/api'
+	import { isDataEmpty } from '$lib/utils/api'
+
+	import '../app.postcss'
+	import 'carbon-components-svelte/css/white.css'
 
 	export let data
 
@@ -52,7 +55,7 @@
 	/>
 </div>
 
-{#if isDataExist(taxiAvailabilityData)}
+{#if date && isDataEmpty(taxiAvailabilityData)}
 	<div class="my-4 p-2 absolute right-0 z-[400]">
 		<ToastNotification
 			lowContrast

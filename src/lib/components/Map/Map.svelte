@@ -7,7 +7,7 @@
 	import { GeoJsonLayer } from '@deck.gl/layers'
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
-	import { isDataExist } from '$lib/utils/api'
+	import { isDataEmpty } from '$lib/utils/api'
 
 	export let data
 
@@ -26,7 +26,7 @@
 
 	function updateDeckLayer(data) {
 		if (map && deckLayer) {
-			if (isDataExist(data)) {
+			if (isDataEmpty(data)) {
 				deckLayer.setProps({ layers: [] })
 				return
 			}
