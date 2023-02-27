@@ -43,7 +43,8 @@
 		map = L.map(document.getElementById('map'), {
 			center: [1.28967, 103.85007],
 			zoom: 12,
-			minZoom: 12
+			minZoom: 12,
+			zoomControl: false
 		})
 
 		deckLayer = new LeafletLayer({

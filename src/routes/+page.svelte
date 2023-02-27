@@ -28,7 +28,7 @@
 
 <Map data={taxiAvailabilityData} />
 
-<div class="my-4 absolute left-1/2 -translate-x-1/2 z-[400] shadow-lg border">
+<div class="my-4 absolute right-1/2 translate-x-1/2 z-[400] shadow-lg border">
 	<DatePicker
 		name="date"
 		dateFormat="Y-m-d"
@@ -42,7 +42,7 @@
 </div>
 
 <div
-	class="my-4 p-2 absolute bottom-4 left-1/2 -translate-x-1/2 z-[400] bg-white shadow-lg border rounded"
+	class="my-4 p-2 absolute bottom-4 right-1/2 translate-x-1/2 z-[400] bg-white shadow-lg border rounded"
 >
 	<Slider
 		labelText={`Select time: (${timeText})`}
@@ -55,13 +55,12 @@
 	/>
 </div>
 
-{#if date && isDataEmpty(taxiAvailabilityData)}
-	<div class="my-4 p-2 absolute right-0 z-[400]">
-		<ToastNotification
-			lowContrast
-			kind="warning-alt"
-			title="No results found."
-			subtitle={`No data: ${date} at ${timeText}`}
-		/>
-	</div>
+{#if isDataEmpty(taxiAvailabilityData)}
+	<ToastNotification
+		class="absolute top-16 lg:top-0 right-1/2 translate-x-[10rem] lg:right-0 lg:translate-x-0 z-[400] w-[22rem]"
+		lowContrast
+		kind="warning-alt"
+		title="No results found."
+		subtitle={`On ${date} at ${timeText}`}
+	/>
 {/if}
