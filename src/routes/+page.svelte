@@ -6,30 +6,33 @@
 	import { getTimeText } from '$lib/utils/getTimeText';
 	import { DatePicker, DatePickerInput, Slider } from 'carbon-components-svelte';
 	import { page } from '$app/stores';
+	import { getYesterday, isBeforeToday } from '$lib/utils/date';
 
 	export let data;
 
-	let date = $page.url.searchParams.get('date') ?? '';
+	let date = $page.url.searchParams.get('date');
 	let time = 0;
 
 	$: taxiAvailability = data.taxiAvailability[time] ?? undefined;
 	$: timeText = getTimeText(time, false);
 
-	function onDateChange() {
-		if (date) goto(`/?date=${date}`);
+	function onDateChange(ev) {
+		if (ev.detail.dateStr && isBeforeToday(ev.detail.dateStr)) goto(`/?date=${ev.detail.dateStr}`);
 	}
 </script>
 
 <Map data={taxiAvailability} />
 <div class="my-4 absolute left-1/2 -translate-x-1/2 z-[400] shadow-lg border">
+	{getYesterday()}
 	<DatePicker
 		name="date"
-		bind:value={date}
 		dateFormat="Y-m-d"
 		datePickerType="single"
+		maxDate={getYesterday()}
+		bind:value={date}
 		on:change={onDateChange}
 	>
-		<DatePickerInput placeholder="Select Date" />
+		<DatePickerInput placeholder="Select Date" onchange={() => console.log(123)} />
 	</DatePicker>
 </div>
 
