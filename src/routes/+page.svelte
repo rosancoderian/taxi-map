@@ -16,13 +16,12 @@
   let date = $page.url.searchParams.get('date')
   let time = 0
 
-  $: taxiAvailabilityData = data.taxiAvailability[time] ?? undefined
-  $: timeText = dateUtils.getTimeText(time, false)
+  $: taxiAvailabilityData = data.taxiAvailability[time]
+  $: timeText = dateUtils.getTimeText(time)
 
   function onDateChange(ev) {
-    if (ev.detail.dateStr && dateUtils.isBeforeToday(ev.detail.dateStr)) {
-      goto(`/?date=${ev.detail.dateStr}`)
-    }
+    const { dateStr } = ev.detail
+    if (dateUtils.isBeforeToday(dateStr)) goto(`/?date=${dateStr}`)
   }
 </script>
 

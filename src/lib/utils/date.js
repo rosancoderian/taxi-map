@@ -16,7 +16,11 @@ export function getYesterday() {
 }
 
 export function getTimeText(/** @type {number} */ time, withMeridiem = true) {
-  const meridiem = time >= 12 ? ' PM' : ' AM'
-  const prefix = time < 10 ? '0' : ''
-  return `${prefix}${time}:00${withMeridiem ? '' : ':00'}${withMeridiem ? meridiem : ''}`
+  const hours = !withMeridiem ? time : time % 12 || 12
+  const minutes = ':00'
+  const seconds = !withMeridiem ? ':00' : ''
+  const ampm = time >= 12 ? ' PM' : ' AM'
+  const meridiem = !withMeridiem ? '' : ampm
+  const prefix = hours < 10 ? '0' : ''
+  return `${prefix}${hours}${minutes}${seconds}${meridiem}`
 }
