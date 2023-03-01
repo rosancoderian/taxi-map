@@ -3,10 +3,10 @@
 
   import { goto } from '$app/navigation'
   import Map from '$lib/components/Map/Map.svelte'
-  import { DatePicker, DatePickerInput, Slider, ToastNotification } from 'carbon-components-svelte'
+  import { DatePicker, DatePickerInput, ToastNotification } from 'carbon-components-svelte'
+  import Slider from 'svelte-range-slider-pips'
   import { page } from '$app/stores'
-  import * as dateUtils from '$lib/utils/date'
-  import { isDataEmpty } from '$lib/utils/api'
+  import { getTimeText, isBeforeToday, getYesterday } from '$lib/utils/date'
 
   import '../app.postcss'
   import 'carbon-components-svelte/css/white.css'
@@ -14,14 +14,13 @@
   export let data
 
   let date = $page.url.searchParams.get('date')
-  let time = 0
 
-  $: taxiAvailabilityData = data.taxiAvailability[time]
-  $: timeText = dateUtils.getTimeText(time)
+  $: timeRange = [0]
+  $: taxiAvailabilityData = data.taxiAvailability[timeRange[0]]
 
   function onDateChange(ev) {
     const { dateStr } = ev.detail
-    if (dateUtils.isBeforeToday(dateStr)) goto(`/?date=${dateStr}`)
+    if (isBeforeToday(dateStr)) goto(`/?date=${dateStr}`)
   }
 </script>
 
@@ -32,7 +31,7 @@
     name="date"
     dateFormat="Y-m-d"
     datePickerType="single"
-    maxDate={dateUtils.getYesterday()}
+    maxDate={getYesterday()}
     bind:value={date}
     on:change={onDateChange}
   >
@@ -41,25 +40,30 @@
 </div>
 
 <div
-  class="my-4 p-2 absolute bottom-4 right-1/2 translate-x-1/2 z-[400] bg-white shadow-lg border rounded"
+  class="my-4 pt-2 px-4 absolute bottom-4 right-1/2 translate-x-1/2 z-[400] bg-white shadow-lg border rounded w-72"
 >
+  Select time: {getTimeText(timeRange[0])}
   <Slider
-    labelText={`Select time: (${timeText})`}
+    pips
     min={0}
     max={24}
-    minLabel="12 AM"
-    maxLabel="12 PM"
-    hideTextInput
-    bind:value={time}
+    all="label"
+    bind:values={timeRange}
+    formatter={(v) => {
+      if (v === 0) return '00:00'
+      else if (v === 12) return '12:00'
+      else if (v === 24) return '23:59'
+      return ''
+    }}
   />
 </div>
 
-{#if date && isDataEmpty(taxiAvailabilityData)}
+{#if taxiAvailabilityData.message}
   <ToastNotification
-    class="absolute top-16 lg:top-0 right-1/2 translate-x-[10rem] lg:right-0 lg:translate-x-0 z-[400] w-[22rem]"
     lowContrast
+    class="absolute top-16 lg:top-0 right-1/2 translate-x-[10rem] lg:right-0 lg:translate-x-0 z-[400] w-[22rem]"
     kind="warning-alt"
-    title="No results found."
-    subtitle={`On ${date} at ${timeText}`}
+    title="No data found"
+    subtitle={`No data is found on ${date}`}
   />
 {/if}

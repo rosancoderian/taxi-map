@@ -6,8 +6,6 @@
   import { MapView } from '@deck.gl/core'
   import { GeoJsonLayer } from '@deck.gl/layers'
   import { onMount } from 'svelte'
-  import { browser } from '$app/environment'
-  import { isDataEmpty } from '$lib/utils/api'
 
   export let data
 
@@ -30,7 +28,7 @@
 
   function updateDeckLayer(data) {
     if (!map || !deckLayer) return
-    if (isDataEmpty(data)) {
+    if (!data || data.message) {
       deckLayer.setProps({ layers: [] })
     } else {
       deckLayer.setProps({ layers: [dataLayer] })

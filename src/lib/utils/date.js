@@ -15,12 +15,16 @@ export function getYesterday() {
   return yesterday
 }
 
-export function getTimeText(/** @type {number} */ time, withMeridiem = true) {
-  const hours = !withMeridiem ? time : time % 12 || 12
-  const minutes = ':00'
-  const seconds = !withMeridiem ? ':00' : ''
-  const ampm = time >= 12 ? ' PM' : ' AM'
-  const meridiem = !withMeridiem ? '' : ampm
-  const prefix = hours < 10 ? '0' : ''
-  return `${prefix}${hours}${minutes}${seconds}${meridiem}`
+export function getTimeText(/** @type {number} */ time, withSeconds = false) {
+  const prefix = time < 10 ? '0' : ''
+  const hours = time >= 24 ? '23' : time
+  const minutes = time >= 24 ? ':59' : ':00'
+
+  let seconds = ''
+
+  if (withSeconds) {
+    seconds = time >= 24 ? ':59' : ':00'
+  }
+
+  return `${prefix}${hours}${minutes}${seconds}`
 }

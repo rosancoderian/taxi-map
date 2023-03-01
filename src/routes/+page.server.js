@@ -13,9 +13,13 @@ export async function load(event) {
   if (date) {
     async function getTaxiAvailability() {
       const cache = await readCache(date)
+
       if (cache) return cache
+
       const data = await (await event.fetch(`/api/taxi/availability?date=${date}`)).json()
-      writeCache(data, date)
+
+      await writeCache(data, date)
+
       return data
     }
 
