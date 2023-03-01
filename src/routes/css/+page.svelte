@@ -26,9 +26,9 @@
   <button class="button">Click me!</button>
 </div>
 
-<head>
+<svelte:head>
   <link href="https://fonts.googleapis.com/css?family=Courier Prime" rel="stylesheet" />
-</head>
+</svelte:head>
 
 <style global>
   * {
@@ -45,7 +45,6 @@
     background: black;
     height: 100%;
     width: 100%;
-    margin: 0px !important;
   }
 
   .container {
