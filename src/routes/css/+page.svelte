@@ -36,11 +36,11 @@
     padding: 0;
     border: 0;
     box-sizing: border-box;
+    font-family: 'Courier Prime';
   }
 
   html,
   body {
-    font-family: 'Courier Prime';
     color: white;
     background: black;
     height: 100%;
