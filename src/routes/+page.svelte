@@ -13,10 +13,12 @@
 
   export let data
 
+  const currentHours = new Date().getHours()
+
   let date = $page.url.searchParams.get('date') ?? ''
 
   $: timeRange = [0, 24]
-  $: maxTime = isToday(date) ? new Date().getHours() : timeRange[1]
+  $: maxTime = isToday(date) && timeRange[1] > currentHours ? currentHours : timeRange[1]
   $: taxiAvailabilityData = data.taxiAvailability
     .slice(timeRange[0], maxTime + 1)
     .filter((d) => !d?.message)
