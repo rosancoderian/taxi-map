@@ -69,6 +69,7 @@
     background: white;
     color: black;
     transition: all 0.2s;
+    font-family: inherit;
   }
 
   .button:hover {
@@ -79,7 +80,6 @@
   }
 
   .video {
-    width: 100%;
     height: 100%;
     z-index: 1;
   }
@@ -107,7 +107,7 @@
 
   @media (max-width: 1023px) {
     .text {
-      font-size: 18vw;
+      font-size: 32vw;
       width: 3ch;
     }
   }
