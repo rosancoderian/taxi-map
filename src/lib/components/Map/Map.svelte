@@ -7,20 +7,23 @@
   import { GeoJsonLayer } from '@deck.gl/layers'
   import { onMount } from 'svelte'
 
-  export let data
+  export let data = []
 
   let map = null
   let deckLayer = null
 
-  $: dataLayer = new GeoJsonLayer({
-    id: 'taxi',
-    data,
-    filled: true,
-    pointRadiusMinPixels: 2,
-    pointRadiusScale: 100,
-    getPointRadius: (f) => 11 - f.properties.scalerank,
-    getFillColor: [200, 0, 80, 180]
-  })
+  $: dataLayers = data.map(
+    (data) =>
+      new GeoJsonLayer({
+        id: 'taxi',
+        data,
+        filled: true,
+        pointRadiusMinPixels: 1,
+        pointRadiusScale: 3,
+        getPointRadius: (f) => 11 - f.properties.scalerank,
+        getFillColor: [200, 0, 80, 180]
+      })
+  )
 
   $: {
     requestAnimationFrame(() => updateDeckLayer(data))
@@ -31,7 +34,7 @@
     if (!data || data.message) {
       deckLayer.setProps({ layers: [] })
     } else {
-      deckLayer.setProps({ layers: [dataLayer] })
+      deckLayer.setProps({ layers: [dataLayers] })
     }
   }
 
@@ -49,7 +52,7 @@
           repeat: false
         })
       ],
-      layers: [dataLayer]
+      layers: [dataLayers]
     })
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

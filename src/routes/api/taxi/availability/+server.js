@@ -8,7 +8,7 @@ export async function GET(event) {
   if (date) {
     const promises = []
 
-    for (let i = 0; i <= 24; i++) {
+    for (let i = 0; i < 24; i++) {
       const timeText = dateUtils.getTimeText(i, true)
       const url = `https://api.data.gov.sg/v1/transport/taxi-availability?date_time=${date}T${timeText}`
       promises.push(event.fetch(url))
