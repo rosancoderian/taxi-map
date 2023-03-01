@@ -6,21 +6,24 @@
   import { DatePicker, DatePickerInput, ToastNotification } from 'carbon-components-svelte'
   import Slider from 'svelte-range-slider-pips'
   import { page } from '$app/stores'
-  import { getTimeText, isBeforeToday, getYesterday } from '$lib/utils/date'
+  import { getTimeText, isToday, getCurrentDate } from '$lib/utils/date'
 
   import '../app.postcss'
   import 'carbon-components-svelte/css/white.css'
 
   export let data
 
-  let date = $page.url.searchParams.get('date')
+  let date = $page.url.searchParams.get('date') ?? ''
 
   $: timeRange = [0, 24]
-  $: taxiAvailabilityData = data.taxiAvailability.slice(timeRange[0], timeRange[1] + 1)
+  $: maxTime = isToday(date) ? new Date().getHours() : timeRange[1]
+  $: taxiAvailabilityData = data.taxiAvailability
+    .slice(timeRange[0], maxTime + 1)
+    .filter((d) => !d?.message)
+  $: timeLabels = [getTimeText(timeRange[0]), getTimeText(timeRange[1])]
 
   function onDateChange(ev) {
-    const { dateStr } = ev.detail
-    if (isBeforeToday(dateStr)) goto(`/?date=${dateStr}`)
+    goto(`/?date=${ev.detail.dateStr}`)
   }
 </script>
 
@@ -31,18 +34,18 @@
     name="date"
     dateFormat="Y-m-d"
     datePickerType="single"
-    maxDate={getYesterday()}
+    maxDate={getCurrentDate()}
     bind:value={date}
     on:change={onDateChange}
   >
-    <DatePickerInput placeholder="Select Date" />
+    <DatePickerInput placeholder="Select date" />
   </DatePicker>
 </div>
 
 <div
   class="my-4 pt-2 px-4 absolute bottom-4 right-1/2 translate-x-1/2 z-[400] bg-white shadow-lg border rounded w-72"
 >
-  Select time: {getTimeText(timeRange[0])} to {getTimeText(timeRange[1])}
+  Select time: {timeLabels[0]} to {timeLabels[1]}
   <Slider
     pips
     range
@@ -63,12 +66,12 @@
   />
 </div>
 
-{#if taxiAvailabilityData?.message}
+{#if $page.url.searchParams.get('date') && !taxiAvailabilityData.length}
   <ToastNotification
     lowContrast
     class="absolute top-16 lg:top-0 right-1/2 translate-x-[10rem] lg:right-0 lg:translate-x-0 z-[400] w-[22rem]"
     kind="warning-alt"
     title="No data found"
-    subtitle={`No data is found on ${date}`}
+    subtitle={`On ${date} from ${timeLabels[0]} to ${timeLabels[1]}`}
   />
 {/if}

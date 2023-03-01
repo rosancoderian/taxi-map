@@ -3,6 +3,7 @@
 export const ssr = false
 
 import { readCache, writeCache } from '$lib/server/utils/cache'
+import { isToday } from '$lib/utils/date'
 
 /** @type {import('./$types').PageLoad} */
 export async function load(event) {
@@ -13,13 +14,9 @@ export async function load(event) {
   if (date) {
     async function getTaxiAvailability() {
       const cache = await readCache(date)
-
-      if (cache) return cache
-
+      if (cache && !isToday(date)) return cache
       const data = await (await event.fetch(`/api/taxi/availability?date=${date}`)).json()
-
       await writeCache(data, date)
-
       return data
     }
 

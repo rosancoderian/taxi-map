@@ -2,11 +2,25 @@
  * @param {string | number | Date} dateString
  */
 export function isBeforeToday(dateString) {
+  if (!dateString) return false
   const today = new Date()
   const date = new Date(dateString)
   today.setHours(0, 0, 0, 0)
   date.setHours(0, 0, 0, 0)
   return date < today
+}
+
+/**
+ * @param {string | number | Date} dateString
+ */
+export function isToday(dateString) {
+  if (!dateString) return false
+  const today = new Date()
+  const date = new Date(dateString)
+  today.setHours(0, 0, 0, 0)
+  date.setHours(0, 0, 0, 0)
+  console.log(today, date)
+  return date.toISOString() === today.toISOString()
 }
 
 export function getYesterday() {
@@ -27,4 +41,8 @@ export function getTimeText(/** @type {number} */ time, withSeconds = false) {
   }
 
   return `${prefix}${hours}${minutes}${seconds}`
+}
+
+export function getCurrentDate() {
+  return new Date().toISOString().substring(0, 10)
 }

@@ -31,11 +31,7 @@
 
   function updateDeckLayer(data) {
     if (!map || !deckLayer) return
-    if (!data || data.message) {
-      deckLayer.setProps({ layers: [] })
-    } else {
-      deckLayer.setProps({ layers: [dataLayers] })
-    }
+    deckLayer.setProps({ layers: [dataLayers] })
   }
 
   onMount(() => {
